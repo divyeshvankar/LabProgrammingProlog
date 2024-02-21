@@ -9,7 +9,8 @@ group(Elements, [_|Sizes], Groups) :-
 
 group(Elements, Sizes, Groups) :-
     permutation(Elements, Permuted),
-    group_permuted(Permuted, Sizes, Groups).
+    group_permuted(Permuted, Sizes, Groups),
+    \+ repeated_combination(Groups).
 
 group_permuted([], [], []).
 group_permuted(Permuted, [Size|Sizes], [Group|Groups]) :-
@@ -22,3 +23,7 @@ split_list([X|Xs], N, [X|Ys], Zs) :-
     N1 is N - 1,
     split_list(Xs, N1, Ys, Zs).
 
+repeated_combination(Groups) :-
+    select(Group, Groups, Rest),
+    member(Item, Group),
+    memberchk(Item, Rest).
