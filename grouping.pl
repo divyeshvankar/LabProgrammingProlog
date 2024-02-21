@@ -1,29 +1,17 @@
-group([], [], []).
+group(_, [], []).
 group(Elements, [Size|Sizes], [Group|Groups]) :-
-    length(Group, Size),
-    append(Group, Rest, Elements),
-    group(Rest, Sizes, Groups).
+    combination(Elements, Size, Group),
+    subtract(Elements, Group, RestElements),
+    group(RestElements, Sizes, Groups).
 
-group(Elements, [_|Sizes], Groups) :-
-    group(Elements, Sizes, Groups).
-
-group(Elements, Sizes, Groups) :-
-    permutation(Elements, Permuted),
-    group_permuted(Permuted, Sizes, Groups),
-    \+ repeated_combination(Groups).
-
-group_permuted([], [], []).
-group_permuted(Permuted, [Size|Sizes], [Group|Groups]) :-
-    split_list(Permuted, Size, Group, Rest),
-    group_permuted(Rest, Sizes, Groups).
-
-split_list(List, 0, [], List).
-split_list([X|Xs], N, [X|Ys], Zs) :-
+combination(_, 0, []).
+combination([X|Xs], N, [X|Combination]) :-
     N > 0,
     N1 is N - 1,
-    split_list(Xs, N1, Ys, Zs).
+    combination(Xs, N1, Combination).
+combination([_|Xs], N, Combination) :-
+    N > 0,
+    combination(Xs, N, Combination).
 
-repeated_combination(Groups) :-
-    select(Group, Groups, Rest),
-    member(Item, Group),
-    memberchk(Item, Rest).
+all_different([]).
+all_different([X|Xs]) :- \+ member(X, Xs), all_different(Xs).
