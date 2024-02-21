@@ -1,0 +1,16 @@
+group(_, [], []).
+group(Elements, [Size|Sizes], [Group|Groups]) :-
+    combination(Elements, Size, Group),
+    subtract(Elements, Group, Remaining),
+    group(Remaining, Sizes, Groups).
+
+combination(_, 0, []).
+combination([X|Xs], N, [X|Ys]) :-
+    N > 0,
+    N1 is N - 1,
+    combination(Xs, N1, Ys).
+combination([_|Xs], N, Ys) :-
+    N > 0,
+    combination(Xs, N, Ys).
+
+?- group([a,b,c,d,e],[1,1,3],G).
