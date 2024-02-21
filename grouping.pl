@@ -1,10 +1,8 @@
-group(_, [], []).
-group(Items, [Size|Sizes], [Group|Groups]) :-
+group([], [], []).
+group(Elements, [Size|Sizes], [Group|Groups]) :-
     length(Group, Size),
-    append(Group, Rest, Items),
+    append(Group, Rest, Elements),
     group(Rest, Sizes, Groups).
 
-group_all(Items, Sizes, Groups) :-
-    findall(Group, group(Items, Sizes, Group), Groups).
-
-?- group_all([a,b,c,d,e],[1,1,3],G).
+group(Elements, [_|Sizes], Groups) :-
+    group(Elements, Sizes, Groups).
