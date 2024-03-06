@@ -1,0 +1,33 @@
+% isSub predicate: checks if String1 is a subset of String2
+isSub([], _).
+isSub([X|Xs], Ys) :-
+    member(X, Ys),
+    isSub(Xs, Ys).
+
+% subSeq predicate: generates all subsequences of a list
+subSeq([], []).
+subSeq([X|Xs], [X|Ys]) :-
+    subSeqHelper(X, Xs, Ys).
+subSeq([_|Xs], Ys) :-
+    subSeq(Xs, Ys).
+
+% subSeqHelper predicate: generates subsequences starting with a specific element
+subSeqHelper(_, [], []).
+subSeqHelper(X, [Y|Ys], Zs) :-
+    X < Y,
+    subSeqHelper(Y, Ys, Zs).
+subSeqHelper(X, [Y|Ys], [Y|Zs]) :-
+    X >= Y,
+    subSeqHelper(X, Ys, Zs).
+
+% longestIncreasingSubSeq predicate: finds the longest increasing subsequence of a list
+longestIncreasingSubSeq(List, Result) :-
+    subSeq(List, Result),
+    isIncreasing(Result).
+
+% isIncreasing predicate: checks if a list is strictly increasing
+isIncreasing([]).
+isIncreasing([_]).
+isIncreasing([X,Y|T]) :-
+    X < Y,
+    isIncreasing([Y|T]).
